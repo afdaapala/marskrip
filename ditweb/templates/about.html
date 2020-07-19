@@ -1,0 +1,29 @@
+{% extends 'main_template.html' %}
+
+{% block content %}
+
+<h1>Tentang Saya</h1>
+
+<div>
+	<div>
+		<li>
+			<div>
+			Nama	
+			</div>
+			<div>
+			{% for out in outt %}
+				{{ out }}	
+				{{ outt }}	
+				{{ out.scan }}	
+				{{ outt.scan }}
+			{% endfor %}
+			</div>
+			
+		</li>
+	</div>
+
+</div>
+
+{%endblock%}
+
+

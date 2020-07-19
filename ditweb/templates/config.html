@@ -1,0 +1,212 @@
+{% extends 'main_template.html' %}
+{% block content %}
+  <!-- <div class="main"> -->
+  <h2>{{mode}}</h2>
+  	    	
+    <form name="form_config" method="POST">
+        {% csrf_token %}
+        <div class="row">
+	        <div class="col-sm-3">
+	        <h4 class="mt-3">Target/s Router:</h4>
+	        <table>
+	        <tr>
+	        <th></th>
+            <th>IP Address</th>
+            <th>Vendor</th>
+        	</tr>
+
+	        {% for device in devices %}
+
+	        	<tr>
+                <td><input type="checkbox" name="device" value="{{ device.id }}"></td>
+                <td>{{device.ip_address}}</td>
+                <td> - {{device.vendor}}</td>
+           		</tr>
+	        {% endfor %}
+
+	        </table>
+
+	        <button type="button" class="btn border" onclick="toggle(this)">Select All</button>
+     		<button type="button" class="btn border" onclick="deselect_all()">Clear</button>
+	        </div>
+
+	        <div class="col-sm-9">
+	        	<div class="row">
+
+	        		<table class="table" width="100%">
+	        		<tr>
+	        			<td><h4>Basic</h4></td>
+	        			<td><h4>:</h4></td>
+	        		
+	        		<td>
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="verify_interface()">IPConfig</button>
+		        
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="new_interface()">New Int</button>
+
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="loopback_interface()">Loop</button>
+
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="dhcp_interface()">DHCP</button>
+
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="nat_interface()">NAT</button>
+
+	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="route()">Route</button>
+
+	        		<button type="button" class="btn btn-warning mb-3 mr-2" onclick="route_check()">Check Route</button>
+	       			
+	       			</td></tr>
+
+        		        			
+        			<tr><td><h4>Route</h4></td><td><h4>:</h4></td>
+	        		<td>
+
+        			<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_static()">Static</button>
+		        
+	        		<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_BGP()">BGP</button>
+
+	        		<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_OSPF()">OSPF</button>
+
+	        		<!-- <button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_rip()">RIPv1</button>
+ -->
+
+	        		
+	        		</td></tr>
+	        	</table></div>
+
+        		
+        	
+        		<div class="row">
+        	
+
+        	<h4 class="mt-6">Mikrotik Command</h4><button type="button" class="btn border mt6-3 mr-3" onclick="clearm()">Clear</button>
+       		 <textarea class="form-control" rows="5" name="mikrotik_command"></textarea>
+
+        	<h4 class="mt-6">Cisco Command</h4><button type="button" class="btn border mt-6 mr-3" onclick="clearc()">Clear</button>
+        	<textarea class="form-control" rows="5" name="cisco_command"></textarea>
+
+        	<button type="submit" class="mt-3 btn btn-success">Submit</button>
+
+        	</div>
+		</div>
+	</div>
+    </form>
+
+<script>
+  function toggle(source) {
+  checkboxes = document.getElementsByName("device");
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}
+</script>
+<script>
+function clearm(){
+    var textm = "";
+    document.forms.form_config.mikrotik_command.value = textm;
+}    
+</script>
+<script>
+function clearc(){
+    var textc = "";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function loopback_interface(){
+    var textm = "interface bridge add name=loopback0\nip address add address=10.10.1.1/32 interface=loopback0\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "int loopback0\nip address 10.10.1.1 255.255.255.255\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function new_interface(){
+    var textm = "ip address add address=172.16.1.1/32 interface=ether0\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "int FastEthernet0/1\nip address 172.16.1.1 255.255.255.255\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function verify_interface(){
+    var textm = "ip address print\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function route(){
+    var textm = "ip route add dst-address=0.0.0.0/0 gateway=192.168.122.1\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function nat_interface(){
+    var textm = "ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function dhcp_interface(){
+    var textm = "ip dhcp-client add interface=ether1\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function route_static(){
+    var textm = "ip route add dst-address=0.0.0.0/0 gateway=192.168.0.1\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function route_OSPF(){
+    var textm = "/routing ospf instance> add name=default\n/routing ospf instance> set 0 router-id=10.255.255.1\n/routing ospf network add network=10.10.1.0/24 area=backbone\n/routing ospf network add network=10.10.1.0/24 area=backbone\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function route_BGP(){
+    var textm = "/routing bgp instance set default as=10\n/routing bgp peer add name=toISP3 remote-address=192.168.1.2 remote-as=30\n/routing bgp peer add name=toISP2 remote-address=192.168.3.2 remote-as=20\n/routing bgp network add network=10.100.100.0/24 synchronize=no\n/routing bgp network add network=10.100.200.0/24 synchronize=no\n/routing bgp peer set isp2 in-filter=isp2-in out-filter=isp2-out\n/routing bgp peer set isp3 in-filter=isp3-in out-filter=isp3-out";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<!-- <script>
+function route_rip(){
+    var textm = "ip address print\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+ -->
+<script>
+function route_check(){
+    var textm = "ip route print\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "show ip interface brief\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'main_template.html' %}
+
+{% block content %}
+<div class="row">
+	<div>
+	    <h2 class="mb-4 ml-4">Device List</h2>
+	</div>
+	<div class="ml-3 mt-2">
+	    <a href="/admin/tomatis/device/add/" class="btn-sm btn-success btn-lg active" role="button" aria-pressed="true"><i class="fa fa-plus" style="font-size:18px;color:white"></i> Add Devices</a>
+	</div>
+</div>
+    
+    
+<div class="col-sm-12">
+    <table class="table">
+        <tbody><tr>
+            <th>IP Address</th>
+            <th>Hostname</th>
+            <th>Vendor</th>
+            <th>SSH Port</th>
+            <th>Status</th>
+        </tr>
+        {% for device in all_device %}
+
+        	<tr>
+                <td>{{ device.ip_address }}</td>
+                <td>{{ device.hostname }}</td>
+                <td>{{ device.vendor }}</td>
+                <td>{{ device.ssh_port }}</td>
+                <td>Up</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
+
+

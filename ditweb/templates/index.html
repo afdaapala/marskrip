@@ -1,9 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title> Index</title>
-</head>
-<body>
-Index
-</body>
-</html>
+{% extends 'main_template.html' %}
+
+{% block content %}
+
+<a href="#" class="btn btn-success btn-lg active mb-5" role="button" aria-pressed="true">Total Router : {{all_device}}</a>
+<a href="#" class="btn btn-primary btn-lg active mb-5" role="button" aria-pressed="true">Cisco : {{cisco_device}}</a>
+<a href="#" class="btn btn-info btn-lg active mb-5" role="button" aria-pressed="true">Mikrotik : {{mikrotik_device}}</a>
+<!-- 
+<div class="mt-5 card-deck" style="margin:auto;">
+    <div class="card border-success mb-5" style="max-width: 12rem;">
+        <div class="card-body text-success">
+        <h5 class="card-title">{{all_device}}</h5>
+        <div class="mr-3 text-right" style="font-size: 36px;">
+            <i class="fa fa-list fa-lg"></i>
+        </div>
+        </div>
+        <div class="card-footer bg-success border-success text-white">Total Devices</div>
+    </div>
+
+    <div class="card border-primary mb-5" style="max-width: 12rem;">
+        <div class="card-body text-primary">
+        <h5 class="card-title">{{cisco_device}}</h5>
+        <div class="mr-3 text-right" style="font-size: 36px;">
+            <i class="fa fa-object-group fa-lg"></i>
+        </div>
+        </div>
+        <div class="card-footer bg-primary border-primary text-white">Cisco Devices</div>
+    </div>    
+    
+    <div class="card border-info mb-5" style="max-width: 12rem;">
+        <div class="card-body text-info">
+        <h5 class="card-title">{{mikrotik_device}}</h5>
+        <div class="mr-3 text-right" style="font-size: 36px;">
+            <i class="fa fa-object-group fa-lg"></i>
+        </div>
+        </div>
+        <div class="card-footer bg-info border-info text-white">Mikrotik Devices</div>
+    </div>
+</div> -->
+
+<h3 class="mt-1" style="font-family: verdana;">Last Event</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Target Device</th>
+            <th>Action</th>
+            <th>Status</th>
+            <th>Time Done</th>
+        </tr>
+    </thead>
+    <tbody>
+    	{% for log in last_event %}
+        <tr>
+                <td></td>
+                <td>{{ log.target }}</td>
+                <td>{{ log.action }}</td>
+
+                {% if log.status == "Success" %}
+
+                <td><button class="btn btn-success btn-block">{{ log.status }}</button></td>
+                {% else %}
+
+                <td><button class="btn btn-danger btn-block">{{ log.status }}</button></td>
+
+                {% endif %}
+
+                <td>{{ log.time }}</td>
+                
+            </tr>
+        {% endfor %}
+       
+    </tbody>
+</table>
+
+{%endblock%}
+
+

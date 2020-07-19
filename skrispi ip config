@@ -1,4 +1,63 @@
-wlkngdsstr tap0 : 10.1.1.1
+%%%%%%%%%%%%%%%%%%%%%%%%%%SIMULASI%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ISP : Class A (202.134.0.0/16)
+VPN/local/mininet : Class C (172.17.1.1/24)
 
-cisco 1 - f0/1 : 10.1.1.2        (ditweb.local) cisco-cisco
-mikrot 1 - ether1 : 10.1.1.3       admin-
+%%%%%%%%%%%%ALL STASIUN LAN / LOOPBACK %%%%%%%%%%%%
+
+sim vpn
+wlkngdsstr : tap0 : 172.17.1.1
+
+%%%%%%%%%%%%%%KANTOR%%%%%%%%%%%%%
+cisco1
+    172.1.1.2
+
+cisco2
+    172.1.1.3
+    
+mininet/OVS : 
+        switch1 : 172.17.1.101
+        switch2 : 172.17.1.102
+        switch3 : 172.17.1.103
+        switch4 : 172.17.1.104
+        
+vpn server (mikrotik)
+              202.90.100.1
+              172.17.1.100
+              192.168.122.254/24 (vpn) PPTP u:bmkg p:admin
+
+%%%%%%%%%%%REMOTE ACCESS%%%%%%%%%% 
+stat1 : isp : 202.134.100.11 / 192.168.122.53
+        vpn : 172.17.1.201 PPTP u:stasiun1 p:admin
+        
+stat2 : isp : 202.134.100.12 / 192.168.122.181
+        vpn : 172.17.1.202 PPTP u:stasiun2 p:admin
+        
+stat3 : isp : 202.134.100.13 / 192.168.122.127
+        vpn : 172.17.1.203 PPTP u:stasiun3 p:admin
+        
+stat4 : isp : 202.134.200.14 (cisco) / 
+        vpn : 172.17.1.204 PPTP u:stasiun4 p:admin
+
+stat5 : isp : 202.134.200.15 (cisco)
+        vpn : 172.17.1.205 PPTP u:stasiun5 p:admin
+
+mikrotik :
+
+interface bridge add name=loopback0
+ip address add address=172.16.1.1/32 interface=loopback0
+
+ip address add address=192.168.1.1/24 interface=ether2
+
+ip dns set servers=8.8.8.8 allow-remote-requests=yes
+ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+ip route add dst-address=0.0.0.0/0 gateway=192.168.122.1
+
+
+
+cisco  : 
+int loopback0
+ip address 172.16.1.1 255.255.255.255
+
+ip interface print
+
+show ip address brief
