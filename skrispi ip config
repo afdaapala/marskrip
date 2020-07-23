@@ -7,6 +7,11 @@ VPN/local/mininet : Class C (172.17.1.1/24)
 sim vpn
 wlkngdsstr : tap0 : 172.17.1.1
 
+%%%%%%%%%%%%%%% MININET %%%%%%%%%%%%%%%
+
+eth0 : 172.17.1.111
+mininet/custom$ sudo mn --custom topogedung.py  --topo gedungtopo --controller=remote,ip=172.17.1.1
+
 %%%%%%%%%%%%%%KANTOR%%%%%%%%%%%%%
 cisco1
     172.1.1.2
@@ -35,29 +40,59 @@ stat2 : isp : 202.134.100.12 / 192.168.122.181
 stat3 : isp : 202.134.100.13 / 192.168.122.127
         vpn : 172.17.1.203 PPTP u:stasiun3 p:admin
         
-stat4 : isp : 202.134.200.14 (cisco) / 
+stat4 : isp : 202.134.200.14 (cisco) / 192.168.122.143
         vpn : 172.17.1.204 PPTP u:stasiun4 p:admin
 
-stat5 : isp : 202.134.200.15 (cisco)
+stat5 : isp : 202.134.200.15 (cisco) / 192.168.122.155
         vpn : 172.17.1.205 PPTP u:stasiun5 p:admin
 
-mikrotik :
+####################  mikrotik :
 
-interface bridge add name=loopback0
-ip address add address=172.16.1.1/32 interface=loopback0
-
+interface bridge add name=loopback0\n
+ip address add address=172.16.1.1/32 interface=loopback0\n
 ip address add address=192.168.1.1/24 interface=ether2
-
 ip dns set servers=8.8.8.8 allow-remote-requests=yes
+
+#NAT
 ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
+
+#Route
 ip route add dst-address=0.0.0.0/0 gateway=192.168.122.1
 
+#DHCP
+ip dhcp-client add interface=ether1
 
-
-cisco  : 
+################# cisco  : 
 int loopback0
 ip address 172.16.1.1 255.255.255.255
-
+do show ip route
 ip interface print
-
 show ip address brief
+ip route 192.168.1.0 255.255.255.0 172.16.1.1
+
+#OSPF
+router ospf 1
+network 10.10.1.0 0.0.0.3 area 0
+network 10.10.1.4 0.0.0.3 area 0
+redistribute connected subnets
+
+#OSPF Frame Relay
+router ospf 1
+network 10.10.10.0 0.0.0.7 area 0
+redistribute connected subnets
+exit
+interface serial 1/0
+ip ospf network broadcast
+
+show ip ospf neighbor
+
+#BGP
+router bgp 100
+neighbor 10.10.1.1 remote-as 200
+network 192.168.1.0 mask 255.255.255.0
+show bgp all
+
+###############  VLAN   ######%%%%%%%%%%%%%%%
+
+
+

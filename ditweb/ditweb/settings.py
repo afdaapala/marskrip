@@ -25,7 +25,7 @@ SECRET_KEY = 'oxlcaomz70d3bj@9ptjketu%4k9tp3#qkrd&s&7a)b00)nfrmg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.1.16']
 
 
 # Application definition
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jquery',
     'tomatis',
+    'admincolors',
+    'django_bootstrap_breadcrumbs',
+    'view_breadcrumbs',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +127,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+BREADCRUMBS_TEMPLATE = "django_bootstrap_breadcrumbs/bootstrap4.html"

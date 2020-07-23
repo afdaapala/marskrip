@@ -1,23 +1,33 @@
 {% extends 'main_template.html' %}
 
-{% block content %}
+{% load django_bootstrap_breadcrumbs %}
 
-<h1>Tentang Saya</h1>
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Tentang" "about" %}
+  {% endblock %}
+
+{% block content %}
+  
+  	{% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
+
+<h1>Tentang Website Ini</h1>
 
 <div>
 	<div>
 		<li>
 			<div>
-			Nama	
+			Bertujuan untuk memenuhi tugas akhir
 			</div>
 			<div>
-			{% for out in outt %}
-				{{ out }}	
-				{{ outt }}	
-				{{ out.scan }}	
-				{{ outt.scan }}
-			{% endfor %}
+			
 			</div>
+			
+		</li>
+		<li>
+			
+		</li>
+		<li>
 			
 		</li>
 	</div>

@@ -122,62 +122,8 @@
     </nav>
 
  <!-- Side navigation -->
-
-<div class="container-fluid">
-    <div class="row min-vh-100 flex-column flex-md-row">
-        <aside class="col-12 col-md-2 p-0 sidebar-custom flex-shrink-1">
-            <nav class="sidebar-custom navbar navbar-expand navbar-dark flex-md-column flex-row align-items-start py-2">
-                <div class="collapse navbar-collapse ">
-                    <ul class="flex-md-column mt-6 flex-row navbar-nav w-100 justify-content-between">
-                        <li class="nav-item">
-                            <a class="nav-link pl-0 text-nowrap mt-6" href="/"><i class="fa fa-bullseye fa-fw"></i> <span class="font-weight-bold">Dashboard</span></a>
-                        </li>
-                        <li class="nav-item mt-6">
-                            <a class="nav-link pl-0 text-nowrap" href="/"><i class="fas fa-home fa-fw"></i> <span class="font-weight-bold">Dashboard</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link pl-0 dropdown-toggle" href="#tomatSubmenu" data-toggle="collapse" aria-expanded="true"><i class="fas fa-rocket fa-fw"></i> <span class="font-weight-bold d-none d-md-inline">Otomasi</span></a>
-                            <ul class="list collapse show flex-md-column flex-row navbar-nav ml-3 w-100 justify-content-between" id="tomatSubmenu">
-                            	<li class="nav-item">
-		                            <a class="nav-link pl-0" href="/devices/"><i class="fa fa-star fa-fw"></i> <span class="d-none d-md-inline">Devices</span></a>
-		                        		</li>
-		                        <li class="nav-item">
-		                            <a class="nav-link pl-0" href="/config/"><i class="fa fa-cog codeply fa-fw"></i> <span class="d-none d-md-inline">Configure</span></a>
-		                        </li>
-		                        <li class="nav-item">
-		                            <a class="nav-link pl-0" href="/verify_result/"><i class="fa fa-heart codeply fa-fw"></i> <span class="d-none d-md-inline">Verify</span></a>
-		                        </li>
-		                        <li class="nav-item">
-		                            <a class="nav-link pl-0" href="/log/"><i class="fa fa-book codeply fa-fw"></i> <span class="d-none d-md-inline">Log</span></a>
-		                        </li>
-		                        <li class="nav-item">
-		                            <a class="nav-link pl-0" href="/nmap/"><i class="fa fa-bullseye codeply fa-fw"></i> <span class="d-none d-md-inline">Network Mapper</span></a>
-		                        </li>
-                            	
-                            </ul>
-                        </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fas fa-network-wired codeply fa-fw"></i> <span class="d-none d-md-inline font-weight-bold">SDN</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link pl-0" href="#"><i class="fas fa-info-circle fa-fw"></i> <span class="d-none d-md-inline font-weight-bold">Tentang</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </aside>
-        <main class="col bg-faded py-3 flex-grow-1">
-            {% block content %}
-
-			{% endblock %}
-
-        </main>
-    </div>
-</div>
-<!-- 
 <div class="sidenav">
-
+     <a href="/">--</a> <!--Placeholder -->
   <a href="/" class="border-left-0 rounded-right border-success"><i class="fas fa-home" style="font-size:20px;color:grey"></i> Dashboard</a>
   <li class="card active sidebar-custom">
                 <a href="#tomatSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle card-header"><i class="fas fa-rocket" style="font-size:20px;color:grey"></i> Otomasi</a>
@@ -199,15 +145,19 @@
                     </li>
                 </ul>
             </li>
+  <!-- <a href="/otomatis/">Otomatis</a> -->  
   <a href="/sdn/" class="border-left-0 rounded-right border-danger"><i class="fas fa-network-wired" style="font-size:20px;color:grey"></i> SDN</a> 
   <a href="/about/" class="border-left-0 rounded-right border-warning"><i class="fas fa-info-circle" style="font-size:20px;color:grey"></i> Tentang</a>
 </div>
 
- -->
+<!-- Page content -->
+<div class="main">
 
+{% block content %}
 
+{% endblock %}
 
-
+</div> 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"

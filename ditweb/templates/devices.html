@@ -1,6 +1,15 @@
 {% extends 'main_template.html' %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Otomasi" "#" %}
+  {% breadcrumb "Devices" "devices" %}
+  {% endblock %}
 
 {% block content %}
+  
+  	{% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
 <div class="row">
 	<div>
 	    <h2 class="mb-4 ml-4">Device List</h2>
@@ -27,7 +36,7 @@
                 <td>{{ device.hostname }}</td>
                 <td>{{ device.vendor }}</td>
                 <td>{{ device.ssh_port }}</td>
-                <td>Up</td>
+                <td><button class="btn btn-success btn-sm btn-block"> Up </button></td>
             </tr>
         {% endfor %}
         </tbody>

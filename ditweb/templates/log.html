@@ -1,9 +1,16 @@
-{% extends "main_template.html" %}
+{% extends 'main_template.html' %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Otomasi" "#" %}
+  {% breadcrumb "Log" "log" %}
+  {% endblock %}
+
 {% block content %}
-    <h2 class="mt-4">Log</h2>
-    
-        
-            
+  
+    {% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
+    <h2 class="">Log</h2>        
         
     <table class="mt-3 table"> 
         <tbody><tr>

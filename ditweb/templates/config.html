@@ -1,36 +1,52 @@
 {% extends 'main_template.html' %}
+
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Otomasi" "#" %}
+  {% breadcrumb "Configure" "config" %}
+  {% endblock %}
+
 {% block content %}
-  <!-- <div class="main"> -->
-  <h2>{{mode}}</h2>
+  
+  	{% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
+
+  <h3>{{mode}}</h3>
   	    	
     <form name="form_config" method="POST">
         {% csrf_token %}
         <div class="row">
-	        <div class="col-sm-3">
+	        <div class="col-sm-3 ml-2">
 	        <h4 class="mt-3">Target/s Router:</h4>
-	        <table>
+	        <table class="">
 	        <tr>
-	        <th></th>
+	        
             <th>IP Address</th>
-            <th>Vendor</th>
+            <th> | Vendor </th>
+            <th>  | #</th>
+
+
         	</tr>
 
 	        {% for device in devices %}
 
 	        	<tr>
-                <td><input type="checkbox" name="device" value="{{ device.id }}"></td>
+                
                 <td>{{device.ip_address}}</td>
                 <td> - {{device.vendor}}</td>
+                <td> - <input type="checkbox" name="device" value="{{ device.id }}"></td>
+
            		</tr>
 	        {% endfor %}
 
 	        </table>
 
-	        <button type="button" class="btn border" onclick="toggle(this)">Select All</button>
-     		<button type="button" class="btn border" onclick="deselect_all()">Clear</button>
+	        <button type="button" class="btn btn-sm border" onclick="toggle(this)">Select All</button>
+     		<button type="button" class="btn btn-sm border" onclick="deselect_all()">Clear</button>
 	        </div>
 
-	        <div class="col-sm-9">
+	        <div class="col-sm">
 	        	<div class="row">
 
 	        		<table class="table" width="100%">
@@ -39,19 +55,19 @@
 	        			<td><h4>:</h4></td>
 	        		
 	        		<td>
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="verify_interface()">IPConfig</button>
+	        		<button type="button" class="btn btn-sm btn-secondary mb-3 mr-2" onclick="verify_interface()">IPConfig</button>
 		        
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="new_interface()">New Int</button>
+	        		<button type="button" class="btn btn-sm btn-secondary mb-3 mr-2" onclick="new_interface()">New Int</button>
 
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="loopback_interface()">Loop</button>
+	        		<button type="button" class="btn btn-sm btn-secondary mb-3 mr-2" onclick="loopback_interface()">Loop</button>
 
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="dhcp_interface()">DHCP</button>
+	        		<button type="button" class="btn btn-sm btn-secondary mb-3 mr-2" onclick="dhcp_interface()">DHCP</button>
 
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="nat_interface()">NAT</button>
+	        		<button type="button" class="btn btn-sm btn-secondary mb-3 mr-2" onclick="nat_interface()">NAT</button>
 
-	        		<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="route()">Route</button>
+	        		<!-- #<button type="button" class="btn btn-secondary mb-3 mr-2" onclick="route()">Route</button> -->
 
-	        		<button type="button" class="btn btn-warning mb-3 mr-2" onclick="route_check()">Check Route</button>
+	        		<button type="button" class="btn btn-sm btn-dark mb-3 mr-2" onclick="vlan()">VLAN</button>
 	       			
 	       			</td></tr>
 
@@ -59,28 +75,26 @@
         			<tr><td><h4>Route</h4></td><td><h4>:</h4></td>
 	        		<td>
 
-        			<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_static()">Static</button>
+        			<button type="button" class="btn btn-sm btn-primary mb-3 mr-2" onclick="route_static()">Static</button>
 		        
-	        		<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_BGP()">BGP</button>
+	        		<button type="button" class="btn btn-sm btn-primary mb-3 mr-2" onclick="route_BGP()">BGP</button>
 
-	        		<button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_OSPF()">OSPF</button>
+	        		<button type="button" class="btn btn-sm btn-primary mb-3 mr-2" onclick="route_OSPF()">OSPF</button>
 
+	        		<button type="button" class="btn btn-sm btn-primary mb-3 mr-2" onclick="route_OSPF_FR()">OSPF Frame Relay</button>
+
+	        		<button type="button" class="btn btn-sm btn-warning mb-3 mr-2" onclick="route_check()">Check Route</button>
 	        		<!-- <button type="button" class="btn btn-primary mb-3 mr-2" onclick="route_rip()">RIPv1</button>
  -->
-
-	        		
-	        		</td></tr>
+	           		</td></tr>
 	        	</table></div>
 
-        		
-        	
         		<div class="row">
         	
-
-        	<h4 class="mt-6">Mikrotik Command</h4><button type="button" class="btn border mt6-3 mr-3" onclick="clearm()">Clear</button>
+        	<h4 class="">Mikrotik Command</h4><button type="button" class="btn btn-sm border ml-2" onclick="clearm()">Clear</button>
        		 <textarea class="form-control" rows="5" name="mikrotik_command"></textarea>
 
-        	<h4 class="mt-6">Cisco Command</h4><button type="button" class="btn border mt-6 mr-3" onclick="clearc()">Clear</button>
+        	<h4 class="">Cisco Command</h4><button type="button" class="btn btn-sm border ml-2" onclick="clearc()">Clear</button><button type="button" class="btn btn-sm border ml-2" onclick="cisco_save()">Save Config</button>
         	<textarea class="form-control" rows="5" name="cisco_command"></textarea>
 
         	<button type="submit" class="mt-3 btn btn-success">Submit</button>
@@ -98,6 +112,7 @@
   }
 }
 </script>
+
 <script>
 function clearm(){
     var textm = "";
@@ -107,6 +122,13 @@ function clearm(){
 <script>
 function clearc(){
     var textc = "";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
+<script>
+function cisco_save(){
+    var textc = "copy run start";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
@@ -122,9 +144,9 @@ function loopback_interface(){
 
 <script>
 function new_interface(){
-    var textm = "ip address add address=172.16.1.1/32 interface=ether0\n";
+    var textm = "ip address add address=172.16.1.1/24 interface=ether0\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "int FastEthernet0/1\nip address 172.16.1.1 255.255.255.255\n";
+    var textc = "int FastEthernet0/0\nip address 172.16.1.1 255.255.255.0\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
@@ -160,7 +182,7 @@ function nat_interface(){
 function dhcp_interface(){
     var textm = "ip dhcp-client add interface=ether1\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "interface f0/0\nip address dhcp\nno sh\nexit\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
@@ -169,38 +191,48 @@ function dhcp_interface(){
 function route_static(){
     var textm = "ip route add dst-address=0.0.0.0/0 gateway=192.168.0.1\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "ip route 192.168.1.0 255.255.255.0 172.16.1.1\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
 
 <script>
 function route_OSPF(){
-    var textm = "/routing ospf instance> add name=default\n/routing ospf instance> set 0 router-id=10.255.255.1\n/routing ospf network add network=10.10.1.0/24 area=backbone\n/routing ospf network add network=10.10.1.0/24 area=backbone\n";
+    var textm = "/routing ospf instance add name=default\n/routing ospf instance set 0 router-id=10.255.255.1\n/routing ospf network add network=10.10.1.0/24 area=backbone\n/routing ospf network add network=10.10.1.0/24 area=backbone\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "router ospf 1\nnetwork 10.10.1.0 0.0.0.3 area 0\nnetwork 10.10.1.4 0.0.0.3 area 0\nredistribute connected subnets\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
 
 <script>
-function route_BGP(){
-    var textm = "/routing bgp instance set default as=10\n/routing bgp peer add name=toISP3 remote-address=192.168.1.2 remote-as=30\n/routing bgp peer add name=toISP2 remote-address=192.168.3.2 remote-as=20\n/routing bgp network add network=10.100.100.0/24 synchronize=no\n/routing bgp network add network=10.100.200.0/24 synchronize=no\n/routing bgp peer set isp2 in-filter=isp2-in out-filter=isp2-out\n/routing bgp peer set isp3 in-filter=isp3-in out-filter=isp3-out";
+function route_OSPF_FR(){
+    var textm = "/routing ospf instance add name=default\n/routing ospf instance set 0 router-id=10.255.255.1\n/routing ospf network add network=10.10.1.0/24 area=backbone\n/routing ospf network add network=10.10.1.0/24 area=backbone\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "router ospf 1\nnetwork 10.10.10.0 0.0.0.7 area 0\nredistribute connected subnets\nexit\ninterface serial 1/0\nip ospf network broadcast\nshow ip ospf neighbor\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
 
-<!-- <script>
-function route_rip(){
-    var textm = "ip address print\n";
+
+<script>
+function route_BGP(){
+    var textm = "/routing bgp instance set default as=10\n/routing bgp peer add name=toISP3 remote-address=192.168.1.2 remote-as=30\n/routing bgp peer add name=toISP2 remote-address=192.168.3.2 remote-as=20\n/routing bgp network add network=10.100.100.0/24 synchronize=no\n/routing bgp network add network=10.100.200.0/24 synchronize=no\n/routing bgp peer set isp2 in-filter=isp2-in out-filter=isp2-out\n/routing bgp peer set isp3 in-filter=isp3-in out-filter=isp3-out\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "router bgp 100\nneighbor 10.10.1.1 remote-as 200\nnetwork 192.168.1.0 mask 255.255.255.0\nshow bgp all\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>
- -->
+
+<script>
+function vlan(){
+    var textm = "/interface bridge vlan\nadd bridge=bridge1 tagged=ether1 untagged=ether2,ether3 vlan-ids=20,30\n";
+    document.forms.form_config.mikrotik_command.value = textm;
+    var textc = "vlan 10\nname vlan1\nexit\nvlan 20\nname vlan2\nexit\ninterface range f0/11\nswitchport mode access\nswitchport access vlan 10\nexit\ninterface range f0/12\nswitchport mode access\nswitchport access vlan 20\nexit\ninterface fa0/1\nswitchport mode trunk\nexit\n";
+    document.forms.form_config.cisco_command.value = textc;
+}    
+</script>
+
 <script>
 function route_check(){
     var textm = "ip route print\n";

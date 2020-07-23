@@ -1,10 +1,21 @@
 {% extends 'main_template.html' %}
 
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Dashboard" "index" %}
+  {% endblock %}
+
 {% block content %}
+  
+  	{% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
 
 <a href="#" class="btn btn-success btn-lg active mb-5" role="button" aria-pressed="true">Total Router : {{all_device}}</a>
 <a href="#" class="btn btn-primary btn-lg active mb-5" role="button" aria-pressed="true">Cisco : {{cisco_device}}</a>
 <a href="#" class="btn btn-info btn-lg active mb-5" role="button" aria-pressed="true">Mikrotik : {{mikrotik_device}}</a>
+
+<button class="btn btn-info btn-lg active mb-5" role="button" onclick="fetch()"> SDN Status</button>
 <!-- 
 <div class="mt-5 card-deck" style="margin:auto;">
     <div class="card border-success mb-5" style="max-width: 12rem;">
@@ -72,6 +83,32 @@
        
     </tbody>
 </table>
+
+
+<script type="text/javascript">
+
+        var url = 'http://www.google.com';
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+               var content_type = xhttp.getResponseHeader("Content-Type");
+               if (content_type.indexOf('text/html') == -1){
+                  alert('excel');
+              }
+              else {
+                  alert('file not found');
+              }
+            }
+            else {
+                alert('invalid url');
+            }
+      };
+      xhttp.open("HEAD", url, true);
+      xhttp.send();
+
+
+</script>
 
 {%endblock%}
 

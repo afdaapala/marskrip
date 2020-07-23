@@ -6,6 +6,8 @@ from datetime import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import nmap
+from urllib.request import urlopen
+from django.template import Context, Template
 
 
 # Create your views here.
@@ -26,7 +28,7 @@ def index(request):
 	return render(request ,'index.html', context)
 
 def devices(request):
-	all_device = Device.objects.all()
+	all_device = Device.objects.order_by('ip_address')
 	
 	context = {
 		'name': 'amar',
@@ -44,6 +46,17 @@ def otomatis(request):
 		'all_device' : all_device,
 	}
 	return render(request ,'otomatis.html', context)
+
+
+def dummy(request):
+	all_device = Device.objects.all()
+	
+	context = {
+		'name': 'amar',
+		'ip': 8080,
+		'all_device' : all_device,
+	}
+	return render(request ,'dummy.html', context)
 
 def config(request):
 	if request.method == "POST":
@@ -73,7 +86,7 @@ def config(request):
 		return redirect('/')
 
 	else:
-		devices = Device.objects.all()
+		devices = Device.objects.order_by('ip_address')
 		context = {
 			'devices' : devices,
 			'mode' : 'Input Configuration',
@@ -119,7 +132,7 @@ def verify_result(request):
 		return render(request, 'result.html', {'result':result})
 	else:
 
-		devices = Device.objects.all()
+		devices = Device.objects.order_by('ip_address')
 		context = {
 			'devices' : devices,
 			'mode' : 'View & Verify Result'
@@ -135,7 +148,15 @@ def log(request):
 	return render(request ,'log.html', context)
 
 def sdn(request):
-	return render(request ,'sdn.html')
+	tpl_html = urlopen("https://twitter.com").read()
+	tpl = Template(tpl_html)
+	context = {
+	'tpl': tpl,
+	'tpl_html' : tpl_html,
+
+	}
+	
+	return render(request ,'sdn.html', context)
 
 def about(request):
 #	cmd = '/home/amardfajri/miniconda3/bin/python /home/amardfajri/marskrip/nmapOS.py'.split()
@@ -144,9 +165,16 @@ def about(request):
 #	outt = pout.communicate(spas + '\n')[1]
 #	xml_results = outt
 
+	# nm = nmap.PortScanner()
+	# nm.scan('172.17.1.*', '22-443') # scan host 127.0.0.1, ports from 22 to 443
+	# nm.command_line() # get command line used for the scan : nmap -oX - -p 22-443 127.0.0.1
+	# nm.scaninfo() # get nmap scan informations {'tcp': {'services': '22-443', 'method': 'connect'}}
+	# nmal = nm.all_hosts() # get all hosts that were scanned
+	#nms = nm['172.17.1.*'].state()
+	
 	context = {
-		'outmap' : 'xml_results',
-		'outt' : 'outt',
+		
+		
 	}
 
 	return render(request ,'about.html', context)
@@ -170,3 +198,6 @@ def NMap(request):
 	}
 
 	return render(request ,'nmap.html', context)
+
+
+

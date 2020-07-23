@@ -1,5 +1,15 @@
-{% extends "main_template.html" %}
+{% extends 'main_template.html' %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+  {{ block.super }}
+  {% breadcrumb "Otomasi" "#" %}
+  {% breadcrumb "Verify" "verify_result" %}
+  {% endblock %}
+
 {% block content %}
+  
+  	{% render_breadcrumbs "django_bootstrap_breadcrumbs/bootstrap4.html" %}
    <h1 class="mt-4">Verify Result</h1>
    <pre>       
    	{{result}}
