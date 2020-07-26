@@ -7,7 +7,6 @@ import subprocess
 from subprocess import Popen, PIPE
 import nmap
 from urllib.request import urlopen
-from django.template import Context, Template
 
 
 # Create your views here.
@@ -17,6 +16,12 @@ def index(request):
 	cisco_device = Device.objects.filter(vendor="cisco")
 	mikrotik_device = Device.objects.filter(vendor="mikrotik")
 	last_event = Log.objects.all().order_by('-id')[:10]
+
+	# NMAP
+	nm = nmap.PortScanner()
+	result = nm.scan('127.0.0.1', '8181')
+	portopen =  nm['127.0.0.1']['tcp'][8181]['state']
+
 	context = {
 		'name': 'amar',
 		'ip': 8080,
@@ -24,6 +29,7 @@ def index(request):
 		'cisco_device' : len(cisco_device),
 		'mikrotik_device' : len(mikrotik_device),
 		'last_event': last_event,
+		'sdnweb' : portopen,
 	}
 	return render(request ,'index.html', context)
 
@@ -68,7 +74,7 @@ def config(request):
 				dev = get_object_or_404(Device, pk=x)
 				ssh_client = paramiko.SSHClient()
 				ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-				ssh_client.connect(hostname=dev.ip_address,username=dev.username,password=dev.password)
+				ssh_client.connect(hostname=dev.ip_address,username=dev.username,password=dev.password,allow_agent=False,look_for_keys=False)
 				if dev.vendor.lower() == 'cisco':
 					conn = ssh_client.invoke_shell()
 					conn.send("conf t\n")
@@ -107,7 +113,7 @@ def verify_result(request):
 				dev = get_object_or_404(Device, pk=x)
 				ssh_client = paramiko.SSHClient()
 				ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-				ssh_client.connect(hostname=dev.ip_address,username=dev.username,password=dev.password)
+				ssh_client.connect(hostname=dev.ip_address,username=dev.username,password=dev.password,allow_agent=False,look_for_keys=False)
 
 				if dev.vendor.lower() == 'mikrotik':
 					for cmd in mikrotik_command:
@@ -165,15 +171,16 @@ def about(request):
 #	outt = pout.communicate(spas + '\n')[1]
 #	xml_results = outt
 
-	# nm = nmap.PortScanner()
-	# nm.scan('172.17.1.*', '22-443') # scan host 127.0.0.1, ports from 22 to 443
+	nm = nmap.PortScanner()
+	result = nm.scan('127.0.0.1', '8181') # scan host 127.0.0.1, ports from 22 to 443
 	# nm.command_line() # get command line used for the scan : nmap -oX - -p 22-443 127.0.0.1
 	# nm.scaninfo() # get nmap scan informations {'tcp': {'services': '22-443', 'method': 'connect'}}
 	# nmal = nm.all_hosts() # get all hosts that were scanned
 	#nms = nm['172.17.1.*'].state()
-	
+	portopen =  nm['127.0.0.1']['tcp'][8181]['state']
+
 	context = {
-		
+		'sdnweb' : portopen,
 		
 	}
 

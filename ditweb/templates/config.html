@@ -237,7 +237,7 @@ function vlan(){
 function route_check(){
     var textm = "ip route print\n";
     document.forms.form_config.mikrotik_command.value = textm;
-    var textc = "show ip interface brief\n";
+    var textc = "show ip route\n";
     document.forms.form_config.cisco_command.value = textc;
 }    
 </script>

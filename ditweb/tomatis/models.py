@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime
+datetime.now()
 
 # Create your models here.
 
